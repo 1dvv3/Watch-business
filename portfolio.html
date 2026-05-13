@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kosen — Parts Catalog</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0A0A0A;
+    color: #D4D4D8;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header {
+    padding: 3rem 2rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #FAFAFA;
+    letter-spacing: 0.02em;
+  }
+  .header p {
+    font-size: 0.85rem;
+    color: #71717A;
+    margin-top: 0.25rem;
+  }
+
+  /* Stats row */
+  .stats {
+    display: flex;
+    gap: 2rem;
+    padding: 1.5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-bottom: 1px solid #27272A;
+  }
+  .stat-item span:first-child {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #FAFAFA;
+  }
+  .stat-item span:last-child {
+    font-size: 0.75rem;
+    color: #52525B;
+    margin-left: 0.35rem;
+  }
+
+  /* Nav */
+  .nav {
+    display: flex;
+    gap: 0.25rem;
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: sticky;
+    top: 0;
+    background: #0A0A0A;
+    z-index: 100;
+    border-bottom: 1px solid #18181B;
+  }
+  .nav a {
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #71717A;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .nav a:hover { color: #D4D4D8; background: #18181B; }
+  .nav a.active { color: #FAFAFA; background: #18181B; }
+
+  /* Main */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  /* Section */
+  .section {
+    padding-top: 2.5rem;
+    scroll-margin-top: 4rem;
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+  .section-head h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #FAFAFA;
+  }
+  .section-head .tag {
+    font-size: 0.65rem;
+    font-weight: 500;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tag.auto { background: #1C1917; color: #A8A29E; }
+  .tag.chrono { background: #1C1A17; color: #A8A29E; }
+  .tag.dress { background: #171A1C; color: #A8A29E; }
+  .tag.skeleton { background: #1A171C; color: #A8A29E; }
+  
+  .section-desc {
+    font-size: 0.8rem;
+    color: #52525B;
+    margin-bottom: 1.5rem;
+    max-width: 600px;
+  }
+
+  /* Part group */
+  .group {
+    margin-bottom: 2rem;
+  }
+  .group-title {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #52525B;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #18181B;
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 0.75rem;
+  }
+
+  /* Card */
+  .card {
+    background: #111113;
+    border: 1px solid #1E1E22;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .card:hover { border-color: #3F3F46; }
+  .card img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    background: #0A0A0A;
+    display: block;
+  }
+  .card .meta {
+    padding: 0.6rem;
+  }
+  .card .name {
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: #A1A1AA;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 0.3rem;
+  }
+  .card .price {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #D4D4D8;
+  }
+  .card a {
+    display: block;
+    font-size: 0.65rem;
+    color: #52525B;
+    text-decoration: none;
+    margin-top: 0.35rem;
+    transition: color 0.15s;
+  }
+  .card a:hover { color: #A1A1AA; }
+
+  /* Footer */
+  .footer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-top: 1px solid #18181B;
+    font-size: 0.7rem;
+    color: #3F3F46;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Kosen — Parts Catalog</h1>
+  <p>Watch parts sourced from AliExpress. Movements, dials, hands, cases &amp; straps.</p>
+</div>
+
+<div class="stats">
+  <div class="stat-item"><span>4</span><span>movements</span></div>
+  <div class="stat-item"><span>65</span><span>dials</span></div>
+  <div class="stat-item"><span>21</span><span>hands</span></div>
+  <div class="stat-item"><span>17</span><span>cases</span></div>
+  <div class="stat-item"><span>15</span><span>straps</span></div>
+</div>
+
+<nav class="nav">
+  <a href="#nh35" class="active">NH35</a>
+  <a href="#vk63a">VK63A</a>
+  <a href="#miyota">Miyota 8285</a>
+  <a href="#nh72">NH72</a>
+</nav>
+
+<div class="main">
+
+<section id="nh35" class="section">
+  <div class="section-head"><h2>NH35</h2><span class="tag auto">AUTOMATIC</span></div>
+  <div class="section-desc">Workhorse movement. Biggest ecosystem. 28.5mm dials, 20mm lug, 36-42mm cases.</div>
+  <div class="group"><div class="group-title">Dials — 17</div><div class="grid">
+    <div class="card">
+      <img src="NH35/images/d01-manbushijie-luminous.png" alt="Manbushijie Luminous  BEST VALUE" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Manbushijie Luminous  BEST VALUE</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005011940217195.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d02-single-calendar-luminous.png" alt="NH35 Single Calendar Luminous" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">NH35 Single Calendar Luminous</div><div class="price">~AU$3.54</div>
+        <a href="https://www.aliexpress.com/item/1005009954277951.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d03-blank-brushed.png" alt="Blank Brushed Dial (NO LOGO)" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Blank Brushed Dial (NO LOGO)</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005010706974173.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d04-bgw9-luminous.png" alt="BGW9 Luminous Modified Dial" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">BGW9 Luminous Modified Dial</div><div class="price">~AU$2.12</div>
+        <a href="https://www.aliexpress.com/item/1005006625587280.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d05-sky-blue-luminous.png" alt="Sky Blue Luminous" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Sky Blue Luminous</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005011867496929.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-S-logo-arabic-green.png" alt="S Logo Arabic Green  DIVER STYLE" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">S Logo Arabic Green  DIVER STYLE</div><div class="price">~AU$11.49</div>
+        <a href="https://www.aliexpress.com/item/1005012169468282.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-S-logo-matte-pink.png" alt="S Logo Matte Pink" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">S Logo Matte Pink</div><div class="price">~AU$16.49</div>
+        <a href="https://www.aliexpress.com/item/1005010779708634.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-S-logo-date-blue.png" alt="S Logo Date Blue Luminous" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">S Logo Date Blue Luminous</div><div class="price">~AU$25.99</div>
+        <a href="https://www.aliexpress.com/item/1005012088741811.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-sub-bgw9-blue.png" alt="SUB BGW9 Blue Luminous  PREMIUM LUME" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">SUB BGW9 Blue Luminous  PREMIUM LUME</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005008379676708.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-starlit-sky.png" alt="Starlit Sky Dial  UNIQUE" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Starlit Sky Dial  UNIQUE</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005012219602174.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-sunray-no-lume.png" alt="Sunray No Lume (Clean Dress)" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Sunray No Lume (Clean Dress)</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005012162579000.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-sunburst-texture.png" alt="Sunburst Texture Sterile  BEST TEXTURE" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Sunburst Texture Sterile  BEST TEXTURE</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005012205817787.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-neiton-multi-color.png" alt="NEITON Multi-Color" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">NEITON Multi-Color</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005009064505645.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-eastern-arabic.png" alt="Eastern Arabic Numerals  UNIQUE" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Eastern Arabic Numerals  UNIQUE</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005012257186343.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-arabic-golden.png" alt="Arabic Golden Dial" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Arabic Golden Dial</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005012135958783.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-rome-s-logo.png" alt="Rome S Logo Dial  DRESS" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Rome S Logo Dial  DRESS</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005012212089428.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/d-new-skx007-mechanical.png" alt="SKX007 Mechanical Dial" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">SKX007 Mechanical Dial</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005011773846540.html" target="_blank">AliExpress</a>
+      </div></div>
+  </div></div>
+  <div class="group"><div class="group-title">Hands — 10</div><div class="grid">
+    <div class="card">
+      <img src="NH35/images/h01-cathedral.png" alt="Cathedral Hands  CLASSIC LOOK" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Cathedral Hands  CLASSIC LOOK</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005010189369638.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/h02-vintage-3pc.png" alt="Vintage 3pc Set  CHEAPEST" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Vintage 3pc Set  CHEAPEST</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005008616812146.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/h03-nautilus.png" alt="Nautilus Style" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Nautilus Style</div><div class="price">~AU$1.61</div>
+        <a href="https://www.aliexpress.com/item/1005012068342225.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/h04-lightning-second.png" alt="Lightning Second Hand" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Lightning Second Hand</div><div class="price">~AU$5.13</div>
+        <a href="https://www.aliexpress.com/item/1005012222437576.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/h05-extra-seconds.png" alt="Extra Second Hands (pack)" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Extra Second Hands (pack)</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005012013974619.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/h-new-green-luminous-needle.png" alt="Green Luminous Needle" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Luminous Needle</div><div class="price">~AU$1.39+</div>
+        <a href="https://www.aliexpress.com/item/1005007881174424.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/h-new-high-quality-green.png" alt="High Quality Green" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">High Quality Green</div><div class="price">~AU$1.39+</div>
+        <a href="https://www.aliexpress.com/item/1005012218611771.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/h-new-standard-c3.png" alt="Standard C3 Luminous  CLEAN" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Standard C3 Luminous  CLEAN</div><div class="price">~AU$1.39+</div>
+        <a href="https://www.aliexpress.com/item/1005005832855995.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/h-new-silver-gold-rose.png" alt="Silver/Gold/Rose Gold Multi-Color" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Silver/Gold/Rose Gold Multi-Color</div><div class="price">~AU$1.39+</div>
+        <a href="https://www.aliexpress.com/item/1005012102410532.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/h-new-richus-silver.png" alt="RICHUS Silver Green" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">RICHUS Silver Green</div><div class="price">~AU$1.39+</div>
+        <a href="https://www.aliexpress.com/item/1005012186860627.html" target="_blank">AliExpress</a>
+      </div></div>
+  </div></div>
+  <div class="group"><div class="group-title">Cases — 6</div><div class="grid">
+    <div class="card">
+      <img src="NH35/images/c01-datejust.png" alt="36/39mm Datejust Style  BEST VALUE" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">36/39mm Datejust Style  BEST VALUE</div><div class="price">~AU$24.17</div>
+        <a href="https://www.aliexpress.com/item/1005009389688960.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/c02-39mm-steel.png" alt="39mm Steel Case  BEST SELLER" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">39mm Steel Case  BEST SELLER</div><div class="price">~AU$25.99</div>
+        <a href="https://www.aliexpress.com/item/1005007811798192.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/c03-jubilee-bracelet.png" alt="36/39mm with Jubilee Bracelet" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">36/39mm with Jubilee Bracelet</div><div class="price">~AU$28.53</div>
+        <a href="https://www.aliexpress.com/item/1005007586087391.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/c04-42mm-diver.png" alt="42mm Diver Style  PREMIUM" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">42mm Diver Style  PREMIUM</div><div class="price">~AU$47.52</div>
+        <a href="https://www.aliexpress.com/item/1005010803900076.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/c05-gmt-style.png" alt="40.5mm GMT Style" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">40.5mm GMT Style</div><div class="price">~AU$25.19</div>
+        <a href="https://www.aliexpress.com/item/1005007735803160.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/c06-41mm-luxury.png" alt="41mm Luxury Steel" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">41mm Luxury Steel</div><div class="price">~AU$32.39</div>
+        <a href="https://www.aliexpress.com/item/1005008488394971.html" target="_blank">AliExpress</a>
+      </div></div>
+  </div></div>
+  <div class="group"><div class="group-title">Straps — 14</div><div class="grid">
+    <div class="card">
+      <img src="NH35/images/s01-vintage-cowhide.png" alt="Vintage Cowhide" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Vintage Cowhide</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005011822851568.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s02-suede.png" alt="Genuine Suede" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Genuine Suede</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005010439474011.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s03-embossed-butterfly.png" alt="Embossed Butterfly Clasp" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Embossed Butterfly Clasp</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005012014124068.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s04-vintage-7color.png" alt="Vintage Cowhide 7 Colors" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Vintage Cowhide 7 Colors</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/4000273602311.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s05-ribbed-nato.png" alt="Ribbed Nylon NATO  BEST SELLER" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Ribbed Nylon NATO  BEST SELLER</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005007137620266.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s06-ballistic-nato.png" alt="Classic Ballistic NATO" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Classic Ballistic NATO</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005007406887946.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s07-parachute-elastic.png" alt="French Parachute Elastic  MOST POPULAR" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">French Parachute Elastic  MOST POPULAR</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005008381530306.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s08-904l-sub.png" alt="904L Sub/Daytona Bracelet" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">904L Sub/Daytona Bracelet</div><div class="price">~AU$8.94</div>
+        <a href="https://www.aliexpress.com/item/1005006884539448.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s09-arc-end-steel.png" alt="Arc End Steel" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Arc End Steel</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005009426068020.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s10-jubilee.png" alt="Jubilee Bracelet" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Jubilee Bracelet</div><div class="price">~AU$7.25</div>
+        <a href="https://www.aliexpress.com/item/1005007137620266.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s11-silicone-qr.png" alt="Silicone Quick Release" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Silicone Quick Release</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005012014072265.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s12-fkm-rubber.png" alt="FKM Rubber CTS" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">FKM Rubber CTS</div><div class="price">~AU$1.82</div>
+        <a href="https://www.aliexpress.com/item/1005009426068020.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s13-milanese-mesh.png" alt="Milanese Mesh 1.0mm  BEST MESH" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Milanese Mesh 1.0mm  BEST MESH</div><div class="price">~AU$4.05</div>
+        <a href="https://www.aliexpress.com/item/1005004771094722.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH35/images/s14-thin-mesh.png" alt="Thin Mesh 0.6mm" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Thin Mesh 0.6mm</div><div class="price">~AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005007137620266.html" target="_blank">AliExpress</a>
+      </div></div>
+  </div></div>
+</section>
+
+<section id="vk63a" class="section">
+  <div class="section-head"><h2>VK63A</h2><span class="tag chrono">CHRONOGRAPH</span></div>
+  <div class="section-desc">Mecaquartz chrono. 3 subdials, 6 hands. 32.5mm dials, 39.7mm cases.</div>
+  <div class="group"><div class="group-title">Dials — 16</div><div class="grid">
+    <div class="card">
+      <img src="VK63A/images/d01-speedmaster.png" alt="Speedmaster Chronograph Style  CHEAPEST" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Speedmaster Chronograph Style  CHEAPEST</div><div class="price">AU$2.85</div>
+        <a href="https://www.aliexpress.com/item/1005009075309774.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d02-green-luminous.png" alt="Green Luminous Chrono" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Luminous Chrono</div><div class="price">AU$11.49</div>
+        <a href="https://www.aliexpress.com/item/1005009149196756.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d03-green-luminous-2.png" alt="Green Luminous (Higher Rated)" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Luminous (Higher Rated)</div><div class="price">AU$15.99</div>
+        <a href="https://www.aliexpress.com/item/1005009726939221.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d04-no-logo-sunburst.png" alt="No Logo Sunburst  CLEANEST" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">No Logo Sunburst  CLEANEST</div><div class="price">AU$16.09</div>
+        <a href="https://www.aliexpress.com/item/1005010480690510.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d05-bliger.png" alt="BLIGER 31.5mm" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">BLIGER 31.5mm</div><div class="price">AU$16.02</div>
+        <a href="https://www.aliexpress.com/item/1005007240977438.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d-new-green-luminous-chrono.png" alt="Green Luminous Chrono (6 hands)" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Luminous Chrono (6 hands)</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005009063342243.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d-new-moonswatch-style.png" alt="Moonswatch Style  UNIQUE" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Moonswatch Style  UNIQUE</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005010400478595.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d-new-green-chrono-2.png" alt="Green Chrono (Different Seller)" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Chrono (Different Seller)</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005008633561219.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d-new-moonswatch-2.png" alt="Moonswatch Variant 2" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Moonswatch Variant 2</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005010258434882.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d-new-c3-green-custom.png" alt="C3 Green Custom Logo  PREMIUM" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">C3 Green Custom Logo  PREMIUM</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005007625675099.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d-new-vk63-replacement.png" alt="VK63 Replacement Dial" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">VK63 Replacement Dial</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005009113631543.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d-new-green-luminous-face.png" alt="Green Luminous Face" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Luminous Face</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005010750226185.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d-new-vk63-pointer.png" alt="VK63 Pointer Dial" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">VK63 Pointer Dial</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005008354149032.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d-new-sterile-custom.png" alt="Sterile Custom  BLANK" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Sterile Custom  BLANK</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005009273479202.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d-new-rainbow-s-logo.png" alt="Rainbow S Logo  COLORFUL" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Rainbow S Logo  COLORFUL</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005011807682841.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/d-new-c3-custom-logo.png" alt="C3 Custom Logo/Pattern" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">C3 Custom Logo/Pattern</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005007090423624.html" target="_blank">AliExpress</a>
+      </div></div>
+  </div></div>
+  <div class="group"><div class="group-title">Hands — 5</div><div class="grid">
+    <div class="card">
+      <img src="VK63A/images/h01-green-basic.png" alt="Green Luminous Basic  CHEAPEST" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Luminous Basic  CHEAPEST</div><div class="price">AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005009520624299.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/h02-c3-green.png" alt="C3 Green Luminous High Quality" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">C3 Green Luminous High Quality</div><div class="price">AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005010487284723.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/h03-daytona-silver.png" alt="Silver Daytona Style  RECOMMENDED" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Silver Daytona Style  RECOMMENDED</div><div class="price">AU$4.69</div>
+        <a href="https://www.aliexpress.com/item/1005009960228750.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/h04-needle-green.png" alt="Silver Needle Green Luminous" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Silver Needle Green Luminous</div><div class="price">AU$5.83</div>
+        <a href="https://www.aliexpress.com/item/1005009649256160.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/h05-multicolor.png" alt="Multi-Color 6-Pin" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Multi-Color 6-Pin</div><div class="price">~AU$4–6</div>
+        <a href="https://www.aliexpress.com/item/1005010285380888.html" target="_blank">AliExpress</a>
+      </div></div>
+  </div></div>
+  <div class="group"><div class="group-title">Cases — 5</div><div class="grid">
+    <div class="card">
+      <img src="VK63A/images/c01-daytona-39.png" alt="39.7mm Daytona Style  BEST SELLER" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">39.7mm Daytona Style  BEST SELLER</div><div class="price">AU$29.99</div>
+        <a href="https://www.aliexpress.com/item/1005006269048367.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/c02-sapphire-39.png" alt="39.7mm Sapphire Glass" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">39.7mm Sapphire Glass</div><div class="price">AU$25.79</div>
+        <a href="https://www.aliexpress.com/item/1005008494871515.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/c03-moon-back.png" alt="39.7mm Moon Back Cover  PREMIUM" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">39.7mm Moon Back Cover  PREMIUM</div><div class="price">AU$32.75</div>
+        <a href="https://www.aliexpress.com/item/1005007513974276.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/c04-39mm-silver.png" alt="39mm Silver Stainless  HIGHEST RATED" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">39mm Silver Stainless  HIGHEST RATED</div><div class="price">AU$24.71</div>
+        <a href="https://www.aliexpress.com/item/1005010021240253.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="VK63A/images/c05-42mm-with-hands.png" alt="42mm with Hands Included" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">42mm with Hands Included</div><div class="price">AU$47.03</div>
+        <a href="https://www.aliexpress.com/item/1005008786028430.html" target="_blank">AliExpress</a>
+      </div></div>
+  </div></div>
+</section>
+
+<section id="miyota" class="section">
+  <div class="section-head"><h2>Miyota 8285</h2><span class="tag dress">DAY-DATE</span></div>
+  <div class="section-desc">Day-date automatic. 31mm dials, 39-41mm cases. Dress watch vibes.</div>
+  <div class="group"><div class="group-title">Dials — 16</div><div class="grid">
+    <div class="card">
+      <img src="Miyota-8285/images/d01-arab-sunray.png" alt="S Logo Day-Date Arab Sunray" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">S Logo Day-Date Arab Sunray</div><div class="price">AU$6.49</div>
+        <a href="https://www.aliexpress.com/item/1005009499092622.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d02-roman-combo.png" alt="Dial + Hands Combo Green Luminous Roman" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Dial + Hands Combo Green Luminous Roman</div><div class="price">AU$19.29</div>
+        <a href="https://www.aliexpress.com/item/1005008728324548.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d03-complete-calendar.png" alt="Complete Calendar Multi-Color  CHEAPEST" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Complete Calendar Multi-Color  CHEAPEST</div><div class="price">AU$4.89</div>
+        <a href="https://www.aliexpress.com/item/1005008368595194.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d04-dual-calendar.png" alt="Dual Calendar Dial + Hands" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Dual Calendar Dial + Hands</div><div class="price">AU$15.89</div>
+        <a href="https://www.aliexpress.com/item/1005008667222314.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d05-sterile.png" alt="29mm Sterile Dual Calendar (NO LOGO)" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">29mm Sterile Dual Calendar (NO LOGO)</div><div class="price">AU$7.55</div>
+        <a href="https://www.aliexpress.com/item/1005009902266848.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d-new-middle-eastern-arabic.png" alt="Middle Eastern Arabic  UNIQUE" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Middle Eastern Arabic  UNIQUE</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005012129949413.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d-new-roman-numeral.png" alt="Roman Numeral Day-Date  DRESS" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Roman Numeral Day-Date  DRESS</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005012064404313.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d-new-sterile-blue-green.png" alt="Sterile Blue-Green Luminous" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Sterile Blue-Green Luminous</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005011832134989.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d-new-multi-color-calendar.png" alt="Multi-Color Calendar" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Multi-Color Calendar</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005010299705590.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d-new-s-logo-day-date.png" alt="S Logo Day-Date Green" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">S Logo Day-Date Green</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005009578484096.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d-new-unmarked-roman.png" alt="Unmarked Roman  CLEAN" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Unmarked Roman  CLEAN</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005009077036379.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d-new-custom-logo-green.png" alt="Custom Logo Green Luminous" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Custom Logo Green Luminous</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005008784675476.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d-new-arab-gold-brown.png" alt="Arab Gold/Brown Sunray  WARM" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Arab Gold/Brown Sunray  WARM</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005011897695710.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d-new-arab-sunray-blue.png" alt="Arab Sunray Blue-Green" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Arab Sunray Blue-Green</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005010634729251.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d-new-blank-matte-sterile.png" alt="Blank Matte Sterile  MINIMAL" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Blank Matte Sterile  MINIMAL</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005010330660699.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/d-new-full-calendar-frame.png" alt="Full Calendar Frame" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Full Calendar Frame</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005007429252188.html" target="_blank">AliExpress</a>
+      </div></div>
+  </div></div>
+  <div class="group"><div class="group-title">Hands — 5</div><div class="grid">
+    <div class="card">
+      <img src="Miyota-8285/images/h01-green-multi.png" alt="Green Luminous Multi-Color  CHEAPEST + BEST SELLER" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Luminous Multi-Color  CHEAPEST + BEST SELLER</div><div class="price">AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005008721997628.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/h02-green-silver.png" alt="Green Luminous Silver/Black/Blue" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Luminous Silver/Black/Blue</div><div class="price">AU$3.73</div>
+        <a href="(no direct link recorded)" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/h03-richus.png" alt="RICHUS Multi-Color" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">RICHUS Multi-Color</div><div class="price">AU$1.39</div>
+        <a href="https://www.aliexpress.com/item/1005009742927591.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/h04-bg-luminous.png" alt="Blue-Green Luminous High Quality" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Blue-Green Luminous High Quality</div><div class="price">AU$5.29</div>
+        <a href="https://www.aliexpress.com/item/1005008653660915.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/h05-green-replacement.png" alt="Green Luminous Replacement" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Luminous Replacement</div><div class="price">AU$5.29</div>
+        <a href="https://www.aliexpress.com/item/1005009264278169.html" target="_blank">AliExpress</a>
+      </div></div>
+  </div></div>
+  <div class="group"><div class="group-title">Cases — 5</div><div class="grid">
+    <div class="card">
+      <img src="Miyota-8285/images/c01-dive-sapphire.png" alt="40mm Dive Sapphire Steel  BEST VALUE" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">40mm Dive Sapphire Steel  BEST VALUE</div><div class="price">AU$25.19</div>
+        <a href="https://www.aliexpress.com/item/1005009894852012.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/c02-316l-bracelet.png" alt="39/40mm 316L Sapphire + Steel Band  PREMIUM" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">39/40mm 316L Sapphire + Steel Band  PREMIUM</div><div class="price">AU$49.91</div>
+        <a href="https://www.aliexpress.com/item/1005009121181129.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/c03-sapphire-ss.png" alt="Sapphire Glass SS Case" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Sapphire Glass SS Case</div><div class="price">AU$23.59</div>
+        <a href="https://www.aliexpress.com/item/1005006717412771.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/c04-904l-sapphire.png" alt="36/39/41mm 904L Sapphire  HIGHEST RATED" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">36/39/41mm 904L Sapphire  HIGHEST RATED</div><div class="price">AU$37.18</div>
+        <a href="https://www.aliexpress.com/item/1005011824400959.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="Miyota-8285/images/c05-ss-mirror.png" alt="39mm SS Sapphire Mirror" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">39mm SS Sapphire Mirror</div><div class="price">AU$21.41</div>
+        <a href="https://www.aliexpress.com/item/1005009201128931.html" target="_blank">AliExpress</a>
+      </div></div>
+  </div></div>
+  <div class="group"><div class="group-title">Straps — 1</div><div class="grid">
+    <div class="card">
+      <img src="" alt="Quick Picks for Day-Date Builds" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Quick Picks for Day-Date Builds</div><div class="price"></div>
+      </div></div>
+  </div></div>
+</section>
+
+<section id="nh72" class="section">
+  <div class="section-head"><h2>NH72</h2><span class="tag skeleton">SKELETON</span></div>
+  <div class="section-desc">Exposed balance wheel. For skeleton & open heart builds. Shares NH35 parts.</div>
+  <div class="group"><div class="group-title">Dials — 16</div><div class="grid">
+    <div class="card">
+      <img src="NH72/images/d01-hollow-ring.png" alt="Hollow Ring Luminous  BEST VALUE" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Hollow Ring Luminous  BEST VALUE</div><div class="price">AU$1.60</div>
+        <a href="search "NH72 skeleton dial 28.5mm" on AliExpress" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/d02-hollow-premium.png" alt="Black/Silver Hollow Dial" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Black/Silver Hollow Dial</div><div class="price">AU$12.59</div>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/d03-sterile-green.png" alt="Sterile Green Luminous  PREMIUM" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Sterile Green Luminous  PREMIUM</div><div class="price">AU$52.99</div>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/d04-customizable.png" alt="Customizable Skeleton" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Customizable Skeleton</div><div class="price">AU$2.64</div>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/d05-sunburst-reference.png" alt="Sunburst NH72 Compatible (NOT skeleton)" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Sunburst NH72 Compatible (NOT skeleton)</div><div class="price">AU$7.19</div>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/d-new-green-hollow-skeleton.png" alt="Green Hollow Skeleton" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Hollow Skeleton</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005010595610347.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/d-new-all-hollow-blue.png" alt="All Hollow Blue Luminous  FULL OPEN" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">All Hollow Blue Luminous  FULL OPEN</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005011546539001.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/d-new-hollow-black-blue.png" alt="Hollow Black/Blue" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Hollow Black/Blue</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005010498654543.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/d-new-hollow-out-blue-black.png" alt="Hollow Out Blue/Black/Gray" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Hollow Out Blue/Black/Gray</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005011530275622.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/d-new-hollow-out-green.png" alt="Hollow Out Green Luminous" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Hollow Out Green Luminous</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005010458197471.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/d-new-green-luminous-hollow.png" alt="Green Luminous Hollow Ring" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Luminous Hollow Ring</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005005506680314.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/d-new-starry-sky.png" alt="Starry Sky Dial  UNIQUE" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Starry Sky Dial  UNIQUE</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005010683193287.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/oh-gradient-multi.png" alt="Gradient Blue/Red/Yellow/Gray  MULTI-COLOR" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Gradient Blue/Red/Yellow/Gray  MULTI-COLOR</div><div class="price">~AU$6.79</div>
+        <a href="https://www.aliexpress.com/item/1005011866061027.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/oh-silver-grey-blue.png" alt="Silver/Grey/Blue Hollow-Out  NO LOGO" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Silver/Grey/Blue Hollow-Out  NO LOGO</div><div class="price">~AU$22.19</div>
+        <a href="https://www.aliexpress.com/item/1005011861791519.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/oh-green-s-logo.png" alt="Green Luminous S Logo" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Green Luminous S Logo</div><div class="price">~AU$6.45</div>
+        <a href="https://www.aliexpress.com/item/1005011917466732.html" target="_blank">AliExpress</a>
+      </div></div>
+    <div class="card">
+      <img src="NH72/images/oh-white-gold.png" alt="White Gold S Logo  DRESS" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">White Gold S Logo  DRESS</div><div class="price">~AU$16.49+</div>
+        <a href="https://www.aliexpress.com/item/1005011931427496.html" target="_blank">AliExpress</a>
+      </div></div>
+  </div></div>
+  <div class="group"><div class="group-title">Hands — 1</div><div class="grid">
+    <div class="card">
+      <img src="" alt="Quick Picks for Skeleton Builds" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Quick Picks for Skeleton Builds</div><div class="price"></div>
+      </div></div>
+  </div></div>
+  <div class="group"><div class="group-title">Cases — 1</div><div class="grid">
+    <div class="card">
+      <img src="" alt="Quick Picks for Skeleton Builds" onerror="this.style.opacity=0">
+      <div class="meta"><div class="name">Quick Picks for Skeleton Builds</div><div class="price"></div>
+      </div></div>
+  </div></div>
+</section>
+
+<div class="footer">Kosen Parts Catalog · Prices in AUD · Sourced from AliExpress</div>
+</div>
+
+<script>
+document.querySelectorAll('.nav a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
+    document.querySelectorAll('.nav a').forEach(n => n.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (scrollY >= s.offsetTop - 80) current = s.id; });
+  navLinks.forEach(a => { a.classList.remove('active'); if (a.getAttribute('href') === '#'+current) a.classList.add('active'); });
+});
+</script>
+</body></html>
